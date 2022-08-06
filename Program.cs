@@ -11,7 +11,8 @@ namespace DataSizeEstimator
             var handles = new Dictionary<System.Type, ITypeAttributeHandler>
             {
                 [typeof(string)] = new StringHandler(),
-                [typeof(List<>)] = new GenericListHandler()
+                [typeof(List<>)] = new GenericListHandler(),
+                //[typeof(List<string>)] = new GenericStringListHandler() // example: uncomment if you want to match List<string> as a top-level type
             };
 
             var attrData = player.GetAttributesFrom(nameof(player.Names));
@@ -22,7 +23,7 @@ namespace DataSizeEstimator
 
         static List<IConcatenableType> HandleAttributesForProperty(IReadOnlyDictionary<Type, ITypeAttributeHandler> handles, IList<CustomAttributeData> attrData, Type t)
         {
-            if (t.IsGenericType)
+            if (t.IsGenericType && !handles.ContainsKey(t))
             {
                 Type wrapperType = t.GetGenericTypeDefinition();
                 var innerTypes = t.GenericTypeArguments;
