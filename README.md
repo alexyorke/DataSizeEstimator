@@ -4,7 +4,8 @@
 
 Given some code, it automatically creates a valid object that conforms to all `ValidationAttributes`. This means that string lengths are randomized, list lengths randomized, and fake data is auto-generated.
 
-Also works recursively on properties, including generics.
+- Also works recursively on properties, including generics.
+- Capable of supporting theoretically any `ValidationAttribute`, including custom classes.
 
 ```csharp
 public class Player
