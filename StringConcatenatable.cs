@@ -2,7 +2,15 @@
 
 class StringConcatenatable : IConcatenableType
 {
-    public int max;
+    private string str;
+    private readonly int min;
+    private readonly int max;
+
+    public StringConcatenatable(int min, int max)
+    {
+        this.min = min;
+        this.max = max;
+    }
     public IConcatenableType Concat(IConcatenableType toConcatWith)
     {
         return toConcatWith.Concat(this);
@@ -10,8 +18,7 @@ class StringConcatenatable : IConcatenableType
 
     public object GetValue()
     {
-        var str = Extensions.NextStrings(Random.Shared , (0, max)).First();
-        return str;
+        return Random.Shared.NextStrings((min, max)).First();
     }
 
     public Type GetUnderlyingType()

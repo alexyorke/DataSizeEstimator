@@ -16,6 +16,6 @@ class StringHandler : ITypeAttributeHandler
                 max = (int)(attribute.ConstructorArguments.Select(x => x.Value).First() ?? throw new NullReferenceException());
             }
         }
-        return new StringConcatenatable { max = max};
+        return new StringConcatenatable(min, max);
     }
 }

@@ -5,12 +5,11 @@ namespace DataSizeEstimator;
 
 class ListConcatenatable<T> : IConcatenableType, IList<T>
 {
-    public List<T> val = new List<T>();
+    public List<T> val = new();
     public int max;
     public IConcatenableType Concat(IConcatenableType toConcatWith)
     {
         var t = toConcatWith.GetUnderlyingType().Name;
-        var u = toConcatWith.GetValue();
         return t switch
         {
             "String" => new ListConcatenatable<List<string>>
