@@ -14,6 +14,10 @@ internal class GenericListHandler : ITypeAttributeHandler
             {
                 max = (int)(attribute.ConstructorArguments.Select(x => x.Value).First() ?? throw new NullReferenceException());
             }
+            else
+            {
+                throw new NotImplementedException(attribute.AttributeType + " has no handler");
+            }
         }
 
         return new ListConcatenatable<string>(0, max);
