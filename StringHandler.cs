@@ -13,7 +13,12 @@ class StringHandler : ITypeAttributeHandler
         {
             if (attribute.AttributeType == typeof(MaxLengthAttribute))
             {
-                max = (int)(attribute.ConstructorArguments.Select(x => x.Value).First() ?? throw new NullReferenceException());
+                max = (int)(attribute.ConstructorArguments.Select(x => x.Value).FirstOrDefault() ?? throw new NullReferenceException("MaxLengthAttribute must have an argument"));
+                if (max == -1) max = Int32.MaxValue;
+            }
+            else
+            {
+                throw new NotImplementedException(attribute.AttributeType + " has no handler");
             }
         }
         return new StringConcatenatable(min, max);
