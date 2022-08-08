@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace DataSizeEstimator;
 
@@ -8,8 +9,23 @@ class ListConcatenatable<T> : IConcatenableType, IList<T>
     public int max;
     public IConcatenableType Concat(IConcatenableType toConcatWith)
     {
-        Console.WriteLine(toConcatWith.GetUnderlyingType());
-        return new ListConcatenatable<object>{Enumerable.Range(0, max).Select(x => toConcatWith.GetValue()) };
+        var t = toConcatWith.GetUnderlyingType().Name;
+        var u = toConcatWith.GetValue();
+        return t switch
+        {
+            "String" => new ListConcatenatable<List<string>>
+            {
+                Enumerable.Range(0, max).Select(x => (string)toConcatWith.GetValue()).ToList()
+            },
+            "Integer" => new ListConcatenatable<List<int>>
+            {
+                Enumerable.Range(0, max).Select(x => (int)toConcatWith.GetValue()).ToList()
+            },
+            _ => new ListConcatenatable<object>
+            {
+                Enumerable.Range(0, max).Select(x => toConcatWith.GetValue()).ToList()
+            }
+        };
     }
 
     public IEnumerator<T> GetEnumerator()

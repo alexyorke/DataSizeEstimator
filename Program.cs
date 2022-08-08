@@ -17,17 +17,23 @@ namespace DataSizeEstimator
 
             var propToGenerateDataFor = nameof(player.Names);
             var output = GenerateDataForProperty(player, propToGenerateDataFor, handles);
-
+            player.Names = (List<List<string>>)output;
             Console.WriteLine(JsonConvert.SerializeObject(output));
         }
 
-        private static IConcatenableType GenerateDataForProperty(Player player, string propToGenerateDataFor,
+        private static object GenerateDataForProperty(Player player, string propToGenerateDataFor,
             Dictionary<Type, ITypeAttributeHandler> handles)
         {
             var attrData = player.GetAttributesFrom(propToGenerateDataFor);
             var items = HandleAttributesForProperty(handles, attrData, player.GetPropertyType(propToGenerateDataFor));
-            var output = items.Aggregate((prev, next) => next.Concat(prev));
-            return output;
+
+            IConcatenableType target = items.First();
+            for (int i = 1; i < items.Count - 1; i++)
+            {
+                target = items[i].Concat(target);
+            }
+
+            return target.GetValue();
         }
 
         static List<IConcatenableType> HandleAttributesForProperty(IReadOnlyDictionary<Type, ITypeAttributeHandler> handles, IList<CustomAttributeData> attrData, Type t)
