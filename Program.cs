@@ -8,7 +8,7 @@ namespace DataSizeEstimator
         static void Main(string[] args)
         {
             var player = new Player();
-            var handles = new Dictionary<System.Type, ITypeAttributeHandler>
+            var handles = new Dictionary<Type, ITypeAttributeHandler>
             {
                 [typeof(string)] = new StringHandler(),
                 [typeof(List<>)] = new GenericListHandler(),

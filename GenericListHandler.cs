@@ -16,6 +16,6 @@ internal class GenericListHandler : ITypeAttributeHandler
             }
         }
 
-        return new ListConcatenatable<string> { val = new List<string>(), max = max };
+        return new ListConcatenatable<string>(0, max);
     }
 }
