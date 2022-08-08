@@ -8,6 +8,7 @@ class ListConcatenatable<T> : IConcatenableType, IList<T>
     public int max;
     public IConcatenableType Concat(IConcatenableType toConcatWith)
     {
+        Console.WriteLine(toConcatWith.GetUnderlyingType());
         return new ListConcatenatable<object>{Enumerable.Range(0, max).Select(x => toConcatWith.GetValue()) };
     }
 
@@ -16,19 +17,19 @@ class ListConcatenatable<T> : IConcatenableType, IList<T>
         return val.GetEnumerator();
     }
 
-    public string GetType()
-    {
-        return "List<T>";
-    }
-
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
     }
 
-    public dynamic GetValue()
+    public object GetValue()
     {
         return val;
+    }
+
+    public Type GetUnderlyingType()
+    {
+        return typeof(IList<T>);
     }
 
     public void Add(T item)

@@ -8,14 +8,14 @@ class StringConcatenatable : IConcatenableType
         return toConcatWith.Concat(this);
     }
 
-    public string GetType()
-    {
-        return "string";
-    }
-
-    public dynamic GetValue()
+    public object GetValue()
     {
         var str = Extensions.NextStrings(Random.Shared , (0, max)).First();
         return str;
+    }
+
+    public Type GetUnderlyingType()
+    {
+        return typeof(string);
     }
 }

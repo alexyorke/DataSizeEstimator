@@ -15,10 +15,19 @@ namespace DataSizeEstimator
                 //[typeof(List<string>)] = new GenericStringListHandler() // example: uncomment if you want to match List<string> as a top-level type
             };
 
-            var attrData = player.GetAttributesFrom(nameof(player.Names));
-            var items = HandleAttributesForProperty(handles, attrData, player.GetPropertyType(nameof(player.Names)));
+            var propToGenerateDataFor = nameof(player.Names);
+            var output = GenerateDataForProperty(player, propToGenerateDataFor, handles);
+
+            Console.WriteLine(JsonConvert.SerializeObject(output));
+        }
+
+        private static IConcatenableType GenerateDataForProperty(Player player, string propToGenerateDataFor,
+            Dictionary<Type, ITypeAttributeHandler> handles)
+        {
+            var attrData = player.GetAttributesFrom(propToGenerateDataFor);
+            var items = HandleAttributesForProperty(handles, attrData, player.GetPropertyType(propToGenerateDataFor));
             var output = items.Aggregate((prev, next) => next.Concat(prev));
-            Console.WriteLine(JsonConvert.SerializeObject(output.GetValue()));
+            return output;
         }
 
         static List<IConcatenableType> HandleAttributesForProperty(IReadOnlyDictionary<Type, ITypeAttributeHandler> handles, IList<CustomAttributeData> attrData, Type t)

@@ -1,8 +1,10 @@
-﻿namespace DataSizeEstimator;
+﻿using System.Runtime.CompilerServices;
+
+namespace DataSizeEstimator;
 
 interface IConcatenableType
 {
     IConcatenableType Concat(IConcatenableType toConcatWith);
-    string GetType();
     object GetValue();
+    Type GetUnderlyingType();
 }
