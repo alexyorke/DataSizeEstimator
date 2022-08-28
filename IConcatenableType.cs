@@ -2,7 +2,7 @@
 
 namespace DataSizeEstimator;
 
-interface IConcatenableType
+public interface IConcatenableType
 {
     IConcatenableType Concat(IConcatenableType toConcatWith);
     object GetValue();

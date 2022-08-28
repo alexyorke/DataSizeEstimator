@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace DataSizeEstimator;
+namespace DataSizeEstimator.Handlers;
 
 internal class GenericStringListHandler : ITypeAttributeHandler
 {

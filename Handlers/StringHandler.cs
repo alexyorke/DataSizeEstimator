@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace DataSizeEstimator;
+namespace DataSizeEstimator.Handlers;
 
 class StringHandler : ITypeAttributeHandler
 {
@@ -15,7 +15,7 @@ class StringHandler : ITypeAttributeHandler
             {
                 max = (int)(attribute.ConstructorArguments.Select(x => x.Value).FirstOrDefault() ??
                             throw new NullReferenceException("MaxLengthAttribute must have an argument"));
-                if (max == -1) max = Int32.MaxValue;
+                if (max == -1) max = int.MaxValue;
                 return new StringConcatenatable(min, max);
             }
 
