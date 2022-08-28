@@ -17,7 +17,7 @@ namespace DataSizeEstimator
 
             var propToGenerateDataFor = nameof(player.PlayerDescription);
             var output = GenerateDataForProperty(player, propToGenerateDataFor, handles);
-            player.Names = output;
+            player.PlayerDescription = output;
             Console.WriteLine(JsonConvert.SerializeObject(output));
         }
 
