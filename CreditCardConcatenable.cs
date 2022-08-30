@@ -2,6 +2,12 @@
 
 class CreditCardConcatenable : IConcatenableType
 {
+    private readonly Random rndInstance;
+
+    public CreditCardConcatenable(Random rndInstance)
+    {
+        this.rndInstance = rndInstance ?? Random.Shared;
+    }
     public IConcatenableType Concat(IConcatenableType toConcatWith)
     {
         return toConcatWith.Concat(this);
@@ -9,7 +15,7 @@ class CreditCardConcatenable : IConcatenableType
 
     public object GetValue()
     {
-        return RandomCreditCardNumberGenerator.GenerateMasterCardNumber();
+        return RandomCreditCardNumberGenerator.GenerateMasterCardNumber(rndInstance);
     }
 
     public Type GetUnderlyingType()
@@ -94,13 +100,13 @@ public static class RandomCreditCardNumberGenerator
 
     public static string[] VOYAGER_PREFIX_LIST = new[] { "8699" };
 
-    private static string CreateFakeCreditCardNumber(string prefix, int length)
+    private static string CreateFakeCreditCardNumber(string prefix, int length, Random rndInstance)
     {
         string ccnumber = prefix;
 
         while (ccnumber.Length < (length - 1))
         {
-            double rnd = (Random.Shared.NextDouble() * 1.0f - 0f);
+            double rnd = (rndInstance.NextDouble() * 1.0f - 0f);
             ccnumber += Math.Floor(rnd * 10);
         }
 
@@ -142,13 +148,13 @@ public static class RandomCreditCardNumberGenerator
 
 
     public static IEnumerable<string> GetCreditCardNumbers(string[] prefixList, int length,
-                                              int howMany)
+                                              int howMany, Random rndInstance)
     {
         var result = new Stack<string>();
 
         for (int i = 0; i < howMany; i++)
         {
-            int randomPrefix = Random.Shared.Next(0, prefixList.Length - 1);
+            int randomPrefix = rndInstance.Next(0, prefixList.Length - 1);
 
             if (randomPrefix > 1)
             {
@@ -157,15 +163,15 @@ public static class RandomCreditCardNumberGenerator
 
             string ccnumber = prefixList[randomPrefix];
 
-            result.Push(CreateFakeCreditCardNumber(ccnumber, length));
+            result.Push(CreateFakeCreditCardNumber(ccnumber, length, rndInstance));
         }
 
         return result;
     }
 
 
-    public static string GenerateMasterCardNumber()
+    public static string GenerateMasterCardNumber(Random rndInstance)
     {
-        return GetCreditCardNumbers(MASTERCARD_PREFIX_LIST, 16, 1).First();
+        return GetCreditCardNumbers(MASTERCARD_PREFIX_LIST, 16, 1, rndInstance).First();
     }
 }

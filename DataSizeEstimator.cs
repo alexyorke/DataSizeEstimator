@@ -1,10 +1,37 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using DataSizeEstimator.Handlers;
 
 namespace DataSizeEstimator;
 
 public class DataSizeEstimator
 {
+    private Random rnd;
+
+    public void GenerateDataForClass<T>(T @class, Dictionary<Type, ITypeAttributeHandler> handlers)
+    {
+        if (@class != null)
+        {
+            foreach (var prop in @class.GetType().GetProperties())
+            {
+                SetObjectProperty(prop.Name, GenerateDataForProperty<T>(@class, prop.Name, handlers), @class);
+            }
+        }
+        else
+        {
+            throw new InvalidDataException(nameof(@class) + " cannot be null");
+        }
+    }
+
+    private void SetObjectProperty(string propertyName, dynamic value, object obj)
+    {
+        PropertyInfo propertyInfo = obj.GetType().GetProperty(propertyName);
+        // make sure object has the property we are after
+        if (propertyInfo != null)
+        {
+            propertyInfo.SetValue(obj, value, null);
+        }
+    }
 
     public dynamic GenerateDataForProperty<T>(T @class, string propToGenerateDataFor,
         Dictionary<Type, ITypeAttributeHandler> handles)
@@ -26,7 +53,7 @@ public class DataSizeEstimator
         throw new InvalidDataException(nameof(@class) + " cannot be null");
     }
 
-    private static List<IConcatenableType> HandleAttributesForProperty(IReadOnlyDictionary<Type, ITypeAttributeHandler> handles, IList<CustomAttributeData> attrData, Type t)
+    private List<IConcatenableType> HandleAttributesForProperty(IReadOnlyDictionary<Type, ITypeAttributeHandler> handles, IList<CustomAttributeData> attrData, Type t)
     {
         if (t.IsGenericType && !handles.ContainsKey(t))
         {
@@ -40,10 +67,15 @@ public class DataSizeEstimator
                 results.AddRange(HandleAttributesForProperty(handles, attrData, innerType));
             }
 
-            results.Add(handles[wrapperType].HandleTypeAttributes(attrData));
+            results.Add(handles[wrapperType].HandleTypeAttributes(attrData, this.rnd));
             return results;
         }
 
-        return new List<IConcatenableType> { handles[t].HandleTypeAttributes(attrData) };
+        return new List<IConcatenableType> { handles[t].HandleTypeAttributes(attrData, this.rnd)};
+    }
+
+    public void SetRandomInstance(Random rnd)
+    {
+        this.rnd = rnd ?? Random.Shared;
     }
 }

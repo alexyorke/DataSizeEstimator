@@ -4,5 +4,5 @@ namespace DataSizeEstimator.Handlers;
 
 public interface ITypeAttributeHandler
 {
-    public IConcatenableType HandleTypeAttributes(IList<CustomAttributeData> attributes);
+    public IConcatenableType HandleTypeAttributes(IList<CustomAttributeData> attributes, Random rnd = null);
 }

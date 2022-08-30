@@ -5,7 +5,7 @@ namespace DataSizeEstimator.Handlers;
 
 public class GenericListHandler : ITypeAttributeHandler
 {
-    public IConcatenableType HandleTypeAttributes(IList<CustomAttributeData> attributes)
+    public IConcatenableType HandleTypeAttributes(IList<CustomAttributeData> attributes, Random rnd = null)
     {
         int max = 0;
         foreach (var attribute in attributes)

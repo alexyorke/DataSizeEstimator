@@ -5,7 +5,7 @@ namespace DataSizeEstimator.Handlers;
 
 public class StringHandler : ITypeAttributeHandler
 {
-    public IConcatenableType HandleTypeAttributes(IList<CustomAttributeData> attributes)
+    public IConcatenableType HandleTypeAttributes(IList<CustomAttributeData> attributes, Random rnd = null)
     {
         var min = 0;
         var max = 0;
@@ -16,18 +16,18 @@ public class StringHandler : ITypeAttributeHandler
                 max = (int)(attribute.ConstructorArguments.Select(x => x.Value).FirstOrDefault() ??
                             throw new NullReferenceException("MaxLengthAttribute must have an argument"));
                 if (max == -1) max = int.MaxValue;
-                return new StringConcatenatable(min, max);
+                return new StringConcatenatable(min, max, rnd);
             }
 
             if (attribute.AttributeType == typeof(CreditCardAttribute))
             {
-                return new CreditCardConcatenable();
+                return new CreditCardConcatenable(rnd);
             }
 
             throw new NotImplementedException(attribute.AttributeType + " has no handler");
         }
 
         // default handler if no attributes are specified
-        return new StringConcatenatable(min, max);
+        return new StringConcatenatable(min, max, rnd);
     }
 }
