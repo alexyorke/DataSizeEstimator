@@ -3,9 +3,9 @@ using DataSizeEstimator.Handlers;
 
 namespace DataSizeEstimator;
 
-public static class DataSizeEstimator
+public class DataSizeEstimator
 {
-    public static dynamic GenerateDataForProperty(Player player, string propToGenerateDataFor,
+    public dynamic GenerateDataForProperty(Player player, string propToGenerateDataFor,
         Dictionary<Type, ITypeAttributeHandler> handles)
     {
         var attrData = player.GetAttributesFrom(propToGenerateDataFor);

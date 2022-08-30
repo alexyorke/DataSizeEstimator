@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace DataSizeEstimator.Handlers;
 
-class StringHandler : ITypeAttributeHandler
+public class StringHandler : ITypeAttributeHandler
 {
     public IConcatenableType HandleTypeAttributes(IList<CustomAttributeData> attributes)
     {
