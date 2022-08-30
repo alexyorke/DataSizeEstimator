@@ -5,19 +5,25 @@ namespace DataSizeEstimator;
 
 public class DataSizeEstimator
 {
-    public dynamic GenerateDataForProperty(Player player, string propToGenerateDataFor,
+
+    public dynamic GenerateDataForProperty<T>(T @class, string propToGenerateDataFor,
         Dictionary<Type, ITypeAttributeHandler> handles)
     {
-        var attrData = player.GetAttributesFrom(propToGenerateDataFor);
-        var items = HandleAttributesForProperty(handles, attrData, player.GetPropertyType(propToGenerateDataFor));
-
-        IConcatenableType target = items.First<IConcatenableType>();
-        for (int i = 1; i < items.Count - 1; i++)
+        if (@class != null)
         {
-            target = items[i].Concat(target);
+            var attrData = @class.GetAttributesFrom(propToGenerateDataFor);
+            var items = HandleAttributesForProperty(handles, attrData, @class.GetPropertyType(propToGenerateDataFor));
+
+            IConcatenableType target = items.First<IConcatenableType>();
+            for (int i = 1; i < items.Count - 1; i++)
+            {
+                target = items[i].Concat(target);
+            }
+
+            return target.GetValue();
         }
 
-        return target.GetValue();
+        throw new InvalidDataException(nameof(@class) + " cannot be null");
     }
 
     private static List<IConcatenableType> HandleAttributesForProperty(IReadOnlyDictionary<Type, ITypeAttributeHandler> handles, IList<CustomAttributeData> attrData, Type t)
